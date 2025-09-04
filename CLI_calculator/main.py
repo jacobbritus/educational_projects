@@ -29,7 +29,7 @@ class Calculator:
             user_input = self.get_input()
             if user_input.isdigit():
                 self.second_number += user_input
-            elif user_input == "\n" and self.second_number:
+            elif user_input in ["=", "\n"] and self.second_number:
                 self.second_number = self.second_number
                 self.print_input()
                 return
