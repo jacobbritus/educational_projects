@@ -32,7 +32,7 @@ class Calculator:
             elif user_input == "\n" and self.second_number:
                 self.second_number = self.second_number
                 self.print_input()
-                break
+                return
             self.print_input()
 
     def get_arithmetic_expression(self):
@@ -45,35 +45,36 @@ class Calculator:
 
 
     def get_result(self):
-        self.first_number = int(self.first_number)
-        self.second_number = int(self.second_number)
 
         if self.arithmetic_expression == "+":
-            self.result = self.first_number + self.second_number
+            self.result = int(self.first_number) + int(self.second_number)
         elif self.arithmetic_expression == "-":
-            self.result = self.first_number - self.second_number
+            self.result = int(self.first_number) - int(self.second_number)
         elif self.arithmetic_expression == "*":
-            self.result = self.first_number * self.second_number
+            self.result = int(self.first_number) * int(self.second_number)
         elif self.arithmetic_expression == "/":
-            self.result = round(self.first_number / self.second_number, 2)
+            try:
+                self.result = round(int(self.first_number) / int(self.second_number), 2)
+            except ZeroDivisionError:
+                self.result = "ERROR"
+
         else:
             self.result = None
 
         self.print_input()
 
 
-        to_continue = self.get_input()
+        continue_with_result = self.get_input()
 
-        while to_continue not in ["+", "-", "*", "/", "c"]:
-            to_continue = self.get_input()
+        while continue_with_result not in ["+", "-", "*", "/", "c"]:
+            continue_with_result = self.get_input()
+
+        if continue_with_result in ["+", "-", "*", "/"] and not self.result == "ERROR":
+            self.first_number = str(self.result)
+            self.arithmetic_expression = continue_with_result
 
 
-        if to_continue in ["+", "-", "*", "/"]:
-            self.first_number = self.result
-            self.arithmetic_expression = to_continue
-
-
-        elif to_continue == "c":
+        elif continue_with_result == "c":
             self.first_number = ""
             self.arithmetic_expression = ""
         self.second_number = self.result = ""
@@ -81,14 +82,17 @@ class Calculator:
 
         self.print_input()
 
-    @ staticmethod
+    @staticmethod
     def get_input():
         return readchar.readkey()
 
     def print_input(self):
         self.clear_terminal()
         if self.result or self.result == 0:
-            display = f"{int(self.result)}"
+            if self.result == "ERROR":
+                display = f"{self.result}"
+            else:
+                display = f"{int(self.result)}"
         elif self.second_number:
             display = f"{self.first_number} {self.arithmetic_expression} {self.second_number}"
 
