@@ -20,21 +20,31 @@ class Calculator:
         time.sleep(1)
         self.result = result_pre
 
+    def update_number_input(self, user_input, attr_name):
+        num = getattr(self, attr_name)
+
+        if user_input.isdigit() or self.first_number and user_input == "." and not "." in num:
+            setattr(self, attr_name, num + user_input)
+            return True
+        elif num and user_input == readchar.key.BACKSPACE:
+            setattr(self, attr_name, num[:-1])
+            return True
+        elif user_input == "c":
+            setattr(self, attr_name, "")
+            return True
+        else:
+            return False
+
     def get_first_number(self):
         while True:
             user_input = self.get_input()
-            if user_input.isdigit() or self.first_number and user_input == "." and not "." in self.first_number:
-                self.first_number += user_input
-            elif self.first_number and user_input == readchar.key.BACKSPACE:
-                self.first_number = self.first_number[:-1]
-            elif user_input == "c":
-                self.first_number = ""
-            elif user_input in ["+", "-", "/", "*"] and self.first_number:
+            valid = self.update_number_input(user_input, attr_name = "first_number")
+            if user_input in ["+", "-", "/", "*"] and self.first_number:
                 self.arithmetic_expression = user_input
                 self.first_number = self.first_number
                 self.print_input()
                 return
-            else:
+            elif not valid:
                 self.error_message()
 
             self.print_input()
@@ -42,17 +52,15 @@ class Calculator:
     def get_second_number(self):
         while True:
             user_input = self.get_input()
-            if user_input.isdigit() or self.second_number and user_input == "." and not "." in self.second_number:
-                self.second_number += user_input
-            elif self.second_number and user_input == readchar.key.BACKSPACE:
-                self.second_number = self.second_number[:-1]
-            elif user_input == "c":
-                self.second_number = ""
-            elif user_input in ["=", readchar.key.ENTER] and self.second_number:
+            valid = self.update_number_input(user_input, "second_number")
+            if user_input in ["=", readchar.key.ENTER] and self.second_number:
                 self.second_number = self.second_number
                 self.print_input()
                 return
-            else:
+            elif user_input == "c":
+                self.first_number = self.arithmetic_expression = ""
+                return
+            elif not valid:
                 self.error_message()
 
             self.print_input()
@@ -160,10 +168,10 @@ class Calculator:
         if not self.first_number:
             self.get_first_number()
 
-
-
-        if not self.second_number:
+        elif not self.second_number:
             self.get_second_number()
+
+        elif self.second_number:
             self.get_result()
 
 
