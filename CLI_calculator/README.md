@@ -5,3 +5,5 @@ This is the first project I decided to create for this repository.
 It's a simple calculator with ASCII art.
 
 It only allows for addition, subtraction, multiplication and division.
+
+I really like the error message method, the calculator feels like a real one now.
