@@ -45,16 +45,20 @@ class Calculator:
 
 
     def get_result(self):
+        a = int(self.first_number) if not "." in self.first_number else float(self.first_number)
+        b = int(self.second_number) if not "." in self.second_number else float(self.second_number)
 
         if self.arithmetic_expression == "+":
-            self.result = int(self.first_number) + int(self.second_number)
+            self.result = a + b
         elif self.arithmetic_expression == "-":
-            self.result = int(self.first_number) - int(self.second_number)
+            self.result = a - b
         elif self.arithmetic_expression == "*":
-            self.result = int(self.first_number) * int(self.second_number)
+            self.result = a * b
         elif self.arithmetic_expression == "/":
             try:
-                self.result = round(int(self.first_number) / int(self.second_number), 2)
+                self.result = round(a / b, 6)
+                if str(self.result)[-1] == "0":
+                    self.result = int(self.result)
             except ZeroDivisionError:
                 self.result = "ERROR"
 
@@ -89,10 +93,8 @@ class Calculator:
     def print_input(self):
         self.clear_terminal()
         if self.result or self.result == 0:
-            if self.result == "ERROR":
-                display = f"{self.result}"
-            else:
-                display = f"{int(self.result)}"
+            display = f"{self.result}"
+
         elif self.second_number:
             display = f"{self.first_number} {self.arithmetic_expression} {self.second_number}"
 
