@@ -1,3 +1,4 @@
+import time
 import readchar
 import os
 
@@ -12,6 +13,13 @@ class Calculator:
     def clear_terminal():
         os.system("cls" if os.name == "nt" else "clear")
 
+    def error_message(self):
+        result_pre = self.result
+        self.result = "ERROR"
+        self.print_input()
+        time.sleep(1)
+        self.result = result_pre
+
     def get_first_number(self):
         while True:
             user_input = self.get_input()
@@ -22,6 +30,9 @@ class Calculator:
                 self.first_number = self.first_number
                 self.print_input()
                 return
+            else:
+                self.error_message()
+
             self.print_input()
 
     def get_second_number(self):
@@ -33,6 +44,9 @@ class Calculator:
                 self.second_number = self.second_number
                 self.print_input()
                 return
+            else:
+                self.error_message()
+
             self.print_input()
 
     def get_arithmetic_expression(self):
@@ -68,10 +82,16 @@ class Calculator:
         self.print_input()
 
 
-        continue_with_result = self.get_input()
 
-        while continue_with_result not in ["+", "-", "*", "/", "c"]:
+        while True:
             continue_with_result = self.get_input()
+
+            if continue_with_result in ["+", "-", "*", "/", "c"]:
+                break
+            else:
+                self.error_message()
+            self.print_input()
+
 
         if continue_with_result in ["+", "-", "*", "/"] and not self.result == "ERROR":
             self.first_number = str(self.result)
@@ -82,7 +102,6 @@ class Calculator:
             self.first_number = ""
             self.arithmetic_expression = ""
         self.second_number = self.result = ""
-
 
         self.print_input()
 
