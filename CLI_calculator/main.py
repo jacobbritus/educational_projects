@@ -25,9 +25,10 @@ class Calculator:
             user_input = self.get_input()
             if user_input.isdigit() or self.first_number and user_input == "." and not "." in self.first_number:
                 self.first_number += user_input
-
             elif self.first_number and user_input == readchar.key.BACKSPACE:
                 self.first_number = self.first_number[:-1]
+            elif user_input == "c":
+                self.first_number = ""
             elif user_input in ["+", "-", "/", "*"] and self.first_number:
                 self.arithmetic_expression = user_input
                 self.first_number = self.first_number
@@ -43,6 +44,10 @@ class Calculator:
             user_input = self.get_input()
             if user_input.isdigit() or self.second_number and user_input == "." and not "." in self.second_number:
                 self.second_number += user_input
+            elif self.second_number and user_input == readchar.key.BACKSPACE:
+                self.second_number = self.second_number[:-1]
+            elif user_input == "c":
+                self.second_number = ""
             elif user_input in ["=", readchar.key.ENTER] and self.second_number:
                 self.second_number = self.second_number
                 self.print_input()
