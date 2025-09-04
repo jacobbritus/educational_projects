@@ -65,35 +65,22 @@ class Calculator:
 
             self.print_input()
 
-    def get_arithmetic_expression(self):
-        self.arithmetic_expression = self.get_input()
-
-
-        while self.arithmetic_expression not in ["+", "-", "/", "*"]:
-
-            self.arithmetic_expression = self.get_input()
-
 
     def get_result(self):
+        arithmetic_operations = {
+            "+": lambda num1, num2: num1 + num2,
+            "-": lambda num1, num2: num1 - num2,
+            "*": lambda num1, num2: num1 * num2,
+            "/": lambda num1, num2: "ERROR" if num2 == "0" else round(num1 / num2, 10),
+
+        }
         a = int(self.first_number) if not "." in self.first_number else float(self.first_number)
         b = int(self.second_number) if not "." in self.second_number else float(self.second_number)
 
-        if self.arithmetic_expression == "+":
-            self.result = a + b
-        elif self.arithmetic_expression == "-":
-            self.result = a - b
-        elif self.arithmetic_expression == "*":
-            self.result = a * b
-        elif self.arithmetic_expression == "/":
-            try:
-                self.result = round(a / b, 6)
-                if str(self.result)[-1] == "0":
-                    self.result = int(self.result)
-            except ZeroDivisionError:
-                self.result = "ERROR"
+        self.result = arithmetic_operations[self.arithmetic_expression](a, b)
 
-        else:
-            self.result = None
+        if str(self.result)[-1] == "0":
+            self.result = int(self.result)
 
         self.print_input()
 
