@@ -1,6 +1,6 @@
-CLI calculator
+# CLI calculator
 
-This is the first project I decided to create for this repository.
+This is the first project for this repository.
 
 It differentiates from common CLI calculators by including ASCII art and the readchar module which reads keyboard input.
 
@@ -18,3 +18,10 @@ The most important lesson:
         }
 
 Before, I used a list of conditionals. This avoids unnecessary code length and allows for scalability.
+
+**User Guide**
+- Type in the first number
+- Type in the arithmetic expression
+- Type in the second number
+- Type in [=] or [enter] to perform the calculation
+- [C] to reset the calculator at any point
