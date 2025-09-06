@@ -3,23 +3,20 @@ from colorama import Fore
 from helper_functions import logo, key_color
 
 class Menu:
-    def __init__(self):
+    def __init__(self, task_list):
+        self.selected_key = None
+        self.task_list = task_list
+
         pass
 
-    @staticmethod
-    def display_menu(page, task_list):
-        box_length = task_list.box_length
-        tasks = task_list.task_info
-        option_keys = task_list.option_keys
+    def display_menu(self, page, task_list):
+        box_length = self.task_list.box_length
+        option_keys = self.task_list.option_keys
 
-        options = ""
-        sentence1 = ""
-        sentence2 = ""
         return_option = ""
         side_characters = 2
         box_length += side_characters # to do list has some extra characters
         top = "┏" + "━" * box_length + "┓"
-        title = ""
         def color_option(number):
             return key_color + "[" + option_keys[number] + "]" + Fore.RESET
 
@@ -27,72 +24,94 @@ class Menu:
         option_key_one = color_option(1)
         option_key_two = color_option(2)
 
-        if page == "main":
-            title = "Main Menu"
-            sentence1 = "Press an assigned key [ ] to interact."
-            options = ["New task", "Settings"]
+        PAGES = {
+            "main": {
+                "title": "Main Menu",
+                "sentences": [
+                    "Press an assigned key [ ] to interact."
+                ],
+                "options": ["New Task", "Settings"]
+            },
 
-        elif page == "settings":
-            title = "Settings"
-            return_option = "Back"
-            options = ["Change Keybinds", "Nothing yet..."]
+            "settings": {
+                "title": "Settings",
+                "return_option": "Back",
+                "options": ["Change Keybinds", "Nothing yet..."]
+            },
 
-        if page[0] == "edit keybinds":
-            title = "Edit Keybinds"
+            "edit_keybinds": {
+                "title": "Edit Keybinds",
+                "sentences": [
+                    "Press the assigned key you want to change.",
+                    "Press \".\" to cancel."
+                ],
+                "return_option": " ",
+                "options": [" ", " "]
+            },
+            "change_keybind": {
+                "title": "Edit Keybinds",
+                "sentences" : [
+                    f"Replace [{self.selected_key}] with what?",
+                    "Press \".\" to cancel."
+                ]
 
-            if page[1]:
+            },
+            "selecting": {
+                "title": "Selecting Task",
+                "return_option": "Back",
+                "options": ["Delete", "Mark Task"]
+            },
+            "adding": {
+                "title": "New Task",
+                "sentences" : [
+                    "Please give this new task a name.",
+                    "Press \"Enter\" to cancel."
+                ]
+        },
 
-                key = page[2]
-                sentence1 = f"Replace [{key}] with what?"
-                sentence2 = "Press \".\" to cancel."
+            "adding_cap": {
+                "title": "New Task",
+                "sentences": [
+                    "You have reached the maximum amount of tasks.",
+                    "Press \"Enter\" to continue."
+                ]
+            },
 
-            else:
-                sentence1 = "Press the assigned key you want to change."
-                sentence2 = "Press \".\" to cancel."
-                return_option = " "
-                options = [" ", " "]
+            "deleting": {
+                "title": "Deleting Task",
+                "sentences": [
+                    "Are you sure you want to delete this task?"
+                ],
+                "options": ["Yes", "No"]
+            },
 
-        elif page == "selecting":
-            title = "Selecting Task"
-            return_option = "Back"
-            options = ["Delete", "Mark Task"]
-
-
-
-        elif page == "adding":
-            title = "New Task"
-            if len(task_list.task_names) >= 10:
-                sentence1 = "You have reached the maximum amount of tasks."
-                sentence2 = "Press \"Enter\" to continue."
-            else:
-                sentence1 = "Please give this new task a name."
-                sentence2 = "Press \"Enter\" to cancel."
-
-
-
-        elif page == "deleting":
-            title = "Deleting Task"
-            sentence1 = "Are you sure you want to delete this task?"
-            options = ["Yes", "No"]
+        }
 
 
+        page_content = PAGES[page]
 
         logo()
         print(top)
-        print(f"┃{title.center(box_length)}┃")
+        print(f"┃{page_content["title"].center(box_length)}┃")
         print("┣" + "━" * box_length + "┫")
-        if sentence1: print(f"┃{sentence1.center(box_length)}┃")
-        if sentence2: print(f"┃{sentence2.center(box_length)}┃")
-        if options and not return_option: print("┃" + " " * box_length + "┃")
-        if return_option:
+
+        if page_content.get("sentences"):
+            for sentence in page_content["sentences"]:
+                print(f"┃{sentence.center(box_length)}┃")
+
+
+        if page_content.get("options") and not page_content.get("return_option"): print("┃" + " " * box_length + "┃")
+
+        if page_content.get("return_option"):
             print(f"┃ {option_key_zero} {return_option.ljust(box_length - 5)}┃")
-            if options: print("┃" + " " * box_length + "┃")
-            print(f"┃ {option_key_one} {options[0].ljust(box_length - len(options[1]) - 11)} {option_key_two} {options[1]} ┃")
-        if not return_option and options:
+            if page_content.get("options"): print("┃" + " " * box_length + "┃")
+            print(f"┃ {option_key_one} {page_content["options"][0].ljust(box_length - len(page_content["options"][1]) - 11)} {option_key_two} {page_content["options"][1]} ┃")
 
-            print(f"┃ {option_key_zero} {options[0].ljust(box_length - (len(options[1]) + 11))} {option_key_one} {options[1]} ┃")
 
-        if not tasks or page == "adding" or page[1] == True:
+        if not page_content.get("return_option") and page_content.get("options"):
+            print(f"┃ {option_key_zero} {page_content["options"][0].ljust(box_length - (len(page_content["options"][1]) + 11))} {option_key_one} {page_content["options"][1]} ┃")
+
+        if page in ["adding", "adding_cap", "change_keybind"]:
             print("┗" + "━" * box_length + "┛")
 
         else:

@@ -4,7 +4,7 @@ from class_UserFlow import UserFlow
 
 code_list = ToDoList()
 
-menu_test = Menu()
+menu_test = Menu(code_list)
 
 user = UserFlow(menu_test, code_list)
 

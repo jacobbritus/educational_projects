@@ -10,6 +10,7 @@ class UserFlow:
         self.menu = menu
         self.task_list = task_list
 
+
     @staticmethod
     def get_input():
         return readchar.readkey().upper()
@@ -42,7 +43,10 @@ class UserFlow:
                 clear_terminal()
 
     def adding_tasks(self):
-        self.menu.display_menu("adding", self.task_list)
+        if len(self.task_list.task_names) >= 10:
+            self.menu.display_menu("adding_cap", self.task_list)
+        else:
+            self.menu.display_menu("adding", self.task_list)
         new_task = input("> ")
         clear_terminal()
 
@@ -76,7 +80,7 @@ class UserFlow:
 
     def changing_keybinds(self):
         while True:
-            self.menu.display_menu(["edit keybinds", False], self.task_list)
+            self.menu.display_menu("edit_keybinds", self.task_list)
             self.task_list.display_tasks("empty")
 
             key = self.get_input()
@@ -87,10 +91,13 @@ class UserFlow:
                 return
 
             # page 2
-            elif key in self.task_list.task_keys or self.task_list.option_keys:
-                while True:
+            elif key in self.task_list.task_keys or key in self.task_list.option_keys:
+                self.menu.selected_key = key
 
-                    self.menu.display_menu(["edit keybinds", True, key], self.task_list)
+                clear_terminal()
+
+                while True:
+                    self.menu.display_menu("change_keybind", self.task_list)
 
                     task_key = self.get_input()
                     print(task_key)

@@ -34,6 +34,8 @@ class ToDoList:
                 print(display_format.format(key=keybind.center(key_center),
                                             task=" ".center(self.task_space),
                                             status=" ".center(self.check_space)))
+            print("┗" + "━" * self.key_space + "┻" + "━" * self.task_space + "┻" + "━" * self.check_space + "┛")
+
             return
 
 

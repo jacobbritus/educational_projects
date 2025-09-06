@@ -16,7 +16,7 @@ def logo():
 \▁▁╱╲▁▁,▁╱▁▁▁▁╱▁╱│▁│╲▁▁,▁╱ """ + Fore.RESET)
 
 
-FILE_NAME = "TO_CODE"
+FILE_NAME = "save_file"
 def save_file(info):
     with open(FILE_NAME, encoding = "utf-8", mode = "w") as f:
         json.dump(info, f)
