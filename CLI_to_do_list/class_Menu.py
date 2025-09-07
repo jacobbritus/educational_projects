@@ -1,22 +1,15 @@
-from colorama import Fore
-
-from helper_functions import logo, key_color
+from helper_functions import *
 
 class Menu:
     def __init__(self, task_list):
         self.selected_key = None
         self.task_list = task_list
 
-        pass
-
-    def display_menu(self, page, task_list):
-        box_length = self.task_list.box_length
+    def display_menu(self, page) -> None:
+        extra_offset = 2
+        box_length = self.task_list.box_length + extra_offset
         option_keys = self.task_list.option_keys
 
-        return_option = ""
-        side_characters = 2
-        box_length += side_characters # to do list has some extra characters
-        top = "┏" + "━" * box_length + "┓"
         def color_option(number):
             return key_color + "[" + option_keys[number] + "]" + Fore.RESET
 
@@ -24,7 +17,7 @@ class Menu:
         option_key_one = color_option(1)
         option_key_two = color_option(2)
 
-        PAGES = {
+        pages = {
             "main": {
                 "title": "Main Menu",
                 "sentences": [
@@ -87,34 +80,34 @@ class Menu:
 
         }
 
+        page_content = pages[page]
 
-        page_content = PAGES[page]
+        print_logo(key_color)
+        print(format_box(BoxVariant.TOP, box_length))
+        print(format_box(BoxVariant.SIDE, box_length, content = page_content["title"].center(box_length)))
+        print(format_box(BoxVariant.C_SIDE, box_length))
 
-        logo()
-        print(top)
-        print(f"┃{page_content["title"].center(box_length)}┃")
-        print("┣" + "━" * box_length + "┫")
+        for sentence in page_content.get("sentences", []):
+            print(format_box(BoxVariant.SIDE, box_length, content = sentence.center(box_length)))
 
-        if page_content.get("sentences"):
-            for sentence in page_content["sentences"]:
-                print(f"┃{sentence.center(box_length)}┃")
-
-
-        if page_content.get("options") and not page_content.get("return_option"): print("┃" + " " * box_length + "┃")
+        return_option_offset = 5
 
         if page_content.get("return_option"):
-            print(f"┃ {option_key_zero} {page_content["return_option"].ljust(box_length - 5)}┃")
-            if page_content.get("options"): print("┃" + " " * box_length + "┃")
-            print(f"┃ {option_key_one} {page_content["options"][0].ljust(box_length - len(page_content["options"][1]) - 11)} {option_key_two} {page_content["options"][1]} ┃")
+            print(format_box(BoxVariant.SIDE,
+                             box_length,
+                             content = f" {option_key_zero} {page_content["return_option"].ljust(box_length - return_option_offset)}"))
 
+        if page_content.get("options"):
+            option1, option2 = page_content["options"]
+            print(format_box(BoxVariant.SIDE, box_length))
+            print(format_box(BoxVariant.SIDE,
+                             box_length,
+                             content=f" {option_key_one} {option1.ljust(box_length - (len(option2) + 11))} {option_key_two} {option2} "))
 
-        if not page_content.get("return_option") and page_content.get("options"):
-            print(f"┃ {option_key_zero} {page_content["options"][0].ljust(box_length - (len(page_content["options"][1]) + 11))} {option_key_one} {page_content["options"][1]} ┃")
+        if page in ["adding", "adding_cap", "change_keybind"] or not self.task_list.task_info:
+            print(format_box(BoxVariant.BOTTOM, box_length))
 
-        if page in ["adding", "adding_cap", "change_keybind"]:
-            print("┗" + "━" * box_length + "┛")
 
         else:
-            key_space = check_space = 5
-            task_name_space = box_length - (key_space + check_space) - side_characters
-            print("┣" + "━" * key_space + "┳" + "━" * task_name_space + "┳" + "━" * check_space + "┫")
+            print(format_box(BoxVariant.COLUMN_SEPARATOR, box_length))
+

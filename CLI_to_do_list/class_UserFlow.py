@@ -17,7 +17,7 @@ class UserFlow:
         # return input()
 
     def main_page(self):
-        self.menu.display_menu("main", self.task_list)
+        self.menu.display_menu("main")
         if self.task_list.task_info: self.task_list.display_tasks(None)
         option_key = self.task_list.option_keys
 
@@ -44,9 +44,9 @@ class UserFlow:
 
     def adding_tasks(self):
         if len(self.task_list.task_names) >= 10:
-            self.menu.display_menu("adding_cap", self.task_list)
+            self.menu.display_menu("adding_cap")
         else:
-            self.menu.display_menu("adding", self.task_list)
+            self.menu.display_menu("adding")
         new_task = input("> ")
         clear_terminal()
 
@@ -61,7 +61,7 @@ class UserFlow:
     def settings(self):
         option_key = self.task_list.option_keys
 
-        self.menu.display_menu("settings", self.task_list)
+        self.menu.display_menu("settings")
         if self.task_list.task_info: self.task_list.display_tasks(None)
 
         key = self.get_input()
@@ -80,7 +80,7 @@ class UserFlow:
 
     def changing_keybinds(self):
         while True:
-            self.menu.display_menu("edit_keybinds", self.task_list)
+            self.menu.display_menu("edit_keybinds")
             self.task_list.display_tasks("empty")
 
             key = self.get_input()
@@ -97,7 +97,7 @@ class UserFlow:
                 clear_terminal()
 
                 while True:
-                    self.menu.display_menu("change_keybind", self.task_list)
+                    self.menu.display_menu("change_keybind")
 
                     task_key = self.get_input()
                     print(task_key)
@@ -122,7 +122,7 @@ class UserFlow:
 
         option_key = self.task_list.option_keys
         while True:
-            self.menu.display_menu("selecting", self.task_list)
+            self.menu.display_menu("selecting")
             self.task_list.display_tasks(task_key)
 
             key = self.get_input()
@@ -147,7 +147,7 @@ class UserFlow:
 
         options = {option_key[0]: "delete", option_key[1]:"cancel"}
         while True:
-            self.menu.display_menu("deleting", self.task_list)
+            self.menu.display_menu("deleting")
             self.task_list.display_tasks(task_key)
 
             key = self.get_input()
