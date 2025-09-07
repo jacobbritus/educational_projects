@@ -103,7 +103,7 @@ class Menu:
         if page_content.get("options") and not page_content.get("return_option"): print("┃" + " " * box_length + "┃")
 
         if page_content.get("return_option"):
-            print(f"┃ {option_key_zero} {return_option.ljust(box_length - 5)}┃")
+            print(f"┃ {option_key_zero} {page_content["return_option"].ljust(box_length - 5)}┃")
             if page_content.get("options"): print("┃" + " " * box_length + "┃")
             print(f"┃ {option_key_one} {page_content["options"][0].ljust(box_length - len(page_content["options"][1]) - 11)} {option_key_two} {page_content["options"][1]} ┃")
 

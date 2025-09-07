@@ -7,6 +7,7 @@ key_color = Fore.MAGENTA
 
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
+    print("\033c\033[3J")
 
 def logo():
     print(key_color + r"""   ▁▁             ▁▁      ▁▁▁
