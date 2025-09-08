@@ -109,6 +109,6 @@ class Menu:
         if page in ["adding", "adding_cap", "change_keybind"] or not self.task_list.task_info:
             print(format_box(BoxVariant.BOTTOM, box_length))
         else:
-            print(format_box(BoxVariant.C_SIDE, box_length, row ="┳"))
+            print(format_box(BoxVariant.C_SIDE, box_length, row ="┳", list = self.task_list))
 
 

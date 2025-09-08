@@ -10,3 +10,11 @@ It differentiates from basic to-do lists by being customizable and the readchar 
 - Listing tasks
 - Changing keybinds
 - Changing colors (to be done)
+
+**Improvements**
+- Mapping page variants in a dict rather than conditionals.
+- Using a create box function which got rid of a lot of DRY.
+  - I got to use my fresh learnt knowledge on **kwargs.
+- Using ```key = list(dict.keys()) → dict[key]``` to index dict keys
+
+

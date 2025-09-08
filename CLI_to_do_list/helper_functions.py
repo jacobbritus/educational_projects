@@ -47,7 +47,7 @@ def load_file():
         with open(FILE_NAME, encoding = "utf-8", mode = "r") as f:
             return json.load(f)
     except (FileNotFoundError, ValueError):
-        return {}, ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["Z", "X", "C"]
+        return {}, ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["1", "2", "3", "4"]
 
 
 def format_box(variant, box_length = 50, **kwargs) -> str:
@@ -58,10 +58,9 @@ def format_box(variant, box_length = 50, **kwargs) -> str:
     extra_offset = kwargs.get("extra_offset", -2)
 
     if row:
-        key_space = check_space = 5
-        task_name_space = box_length - (key_space + check_space) + extra_offset
-
-        return sides[0] + "━" * key_space + row + "━" * task_name_space + row + "━" * check_space + sides[1]
+        to_do_list = kwargs.get("list")
+        key_space, check_space, name_space = (to_do_list.key_space, to_do_list.check_space, to_do_list.name_space)
+        return sides[0] + "━" * key_space + row + "━" * name_space + row + "━" * check_space + sides[1]
 
     if content:
         return f"{sides[0]}{content}{sides[1]}"

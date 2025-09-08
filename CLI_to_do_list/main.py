@@ -21,7 +21,7 @@ def opening_animation():
 
 def main():
     # opening_animation()
-    input()
+
     while True:
         to_do_list.adapt_box_length()
         user.main_page()
