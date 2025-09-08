@@ -6,12 +6,13 @@ class Menu:
         self.task_list = task_list
 
     def display_menu(self, page) -> None:
+        """Prints the UI"""
         extra_offset = 2
         box_length = self.task_list.box_length + extra_offset
         option_keys = self.task_list.option_keys
 
         def color_option(number):
-            return key_color + "[" + option_keys[number] + "]" + Fore.RESET
+            return KEY_COLOR + "[" + option_keys[number] + "]" + Fore.RESET
 
         option_key_zero = color_option(0)
         option_key_one = color_option(1)
@@ -82,7 +83,7 @@ class Menu:
 
         page_content = pages[page]
 
-        print_logo(key_color)
+        print_logo(KEY_COLOR)
         print(format_box(BoxVariant.TOP, box_length))
         print(format_box(BoxVariant.SIDE, box_length, content = page_content["title"].center(box_length)))
         print(format_box(BoxVariant.C_SIDE, box_length))
@@ -99,15 +100,15 @@ class Menu:
 
         if page_content.get("options"):
             option1, option2 = page_content["options"]
-            print(format_box(BoxVariant.SIDE, box_length))
+            option_keys = (option_key_zero, option_key_one) if not page_content.get("return_option") else (option_key_one, option_key_two)
+            print(format_box(BoxVariant.C_SIDE, box_length))
             print(format_box(BoxVariant.SIDE,
                              box_length,
-                             content=f" {option_key_one} {option1.ljust(box_length - (len(option2) + 11))} {option_key_two} {option2} "))
+                             content=f" {option_keys[0]} {option1.ljust(box_length - (len(option2) + 11))} {option_keys[1]} {option2} "))
 
         if page in ["adding", "adding_cap", "change_keybind"] or not self.task_list.task_info:
             print(format_box(BoxVariant.BOTTOM, box_length))
-
-
         else:
-            print(format_box(BoxVariant.COLUMN_SEPARATOR, box_length))
+            print(format_box(BoxVariant.C_SIDE, box_length, row ="┳"))
+
 

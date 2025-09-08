@@ -4,8 +4,8 @@ from colorama import Fore
 from enum import Enum, auto
 
 
-
-colors = [
+TASK_PAGE_CAP = 5
+COLORS = [
     Fore.RED,
     Fore.LIGHTRED_EX,
     Fore.YELLOW,
@@ -23,7 +23,7 @@ colors = [
     Fore.BLACK,
     Fore.LIGHTBLACK_EX,
 ]
-key_color = Fore.MAGENTA
+KEY_COLOR = Fore.MAGENTA
 
 def clear_terminal():
     os.system("cls" if os.name == "nt" else "clear")
@@ -50,18 +50,18 @@ def load_file():
         return {}, ["Q", "W", "E", "R", "T", "Y", "U", "I", "O", "P"], ["Z", "X", "C"]
 
 
-def format_box(variant, box_length = 50, **kwargs):
+def format_box(variant, box_length = 50, **kwargs) -> str:
     sides = variant.value
     content = kwargs.get("content")
     whitespace = kwargs.get("whitespace")
+    row = kwargs.get("row")
+    extra_offset = kwargs.get("extra_offset", -2)
 
-    if variant.name in [BoxVariant.COLUMN_SEPARATOR, BoxVariant.BOTTOM_CLOSER]:
-        print(variant)
-        extra_offset = 2
+    if row:
         key_space = check_space = 5
-        task_name_space = box_length - (key_space + check_space) - extra_offset
+        task_name_space = box_length - (key_space + check_space) + extra_offset
 
-        return sides[0] + "━" * key_space + "┳" + "━" * task_name_space + "┳" + "━" * check_space + sides[1]
+        return sides[0] + "━" * key_space + row + "━" * task_name_space + row + "━" * check_space + sides[1]
 
     if content:
         return f"{sides[0]}{content}{sides[1]}"
@@ -71,8 +71,6 @@ def format_box(variant, box_length = 50, **kwargs):
 
 
 class BoxVariant(Enum):
-    COLUMN_SEPARATOR = ["┣", "┫"]
-    BOTTOM_CLOSER = ["┗", "┛"]
     TOP =    ["┏", "┓"]
     SIDE =   ["┃", "┃"]
     C_SIDE = ["┣", "┫"]

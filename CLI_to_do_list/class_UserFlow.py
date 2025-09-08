@@ -1,6 +1,6 @@
 import readchar
 
-from class_ToDoList import ToDoList
+from helper_functions import *
 from helper_functions import clear_terminal
 
 
@@ -43,7 +43,7 @@ class UserFlow:
                 clear_terminal()
 
     def adding_tasks(self):
-        if len(self.task_list.task_names) >= 10:
+        if len(self.task_list.task_names) >= TASK_PAGE_CAP:
             self.menu.display_menu("adding_cap")
         else:
             self.menu.display_menu("adding")
@@ -52,7 +52,7 @@ class UserFlow:
 
         if new_task.strip() == "":
             return
-        elif len(self.task_list.task_names) >= 10:
+        elif len(self.task_list.task_names) >= TASK_PAGE_CAP:
             return
         else:
             self.task_list.add_tasks(new_task)
@@ -81,7 +81,7 @@ class UserFlow:
     def changing_keybinds(self):
         while True:
             self.menu.display_menu("edit_keybinds")
-            self.task_list.display_tasks("empty")
+            self.task_list.display_tasks("edit_keybinds")
 
             key = self.get_input()
             clear_terminal()

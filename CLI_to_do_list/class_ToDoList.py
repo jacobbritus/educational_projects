@@ -15,69 +15,68 @@ class ToDoList:
         self.check_space = 5
         self.task_space = box_length - (self.key_space + self.check_space)
 
-    def display_tasks(self, key):
-        seperator = "┣" + "━" * self.key_space + "╋" + "━" * self.task_space + "╋" + "━" * self.check_space + "┫"
+    def display_tasks(self, key) -> None:
+        """Prints out the task list."""
         display_format = "┃{key}┃{task}┃{status}┃"
 
         print(display_format.format(key="Key".center(self.key_space),
                                                task="Task".center(self.task_space),
                                                status="Check".center(self.check_space)))
 
+        # === prints empty tasks and their keybinds when changing keybinds ===
+        if key == "edit_keybinds":
+            for i in range(TASK_PAGE_CAP):
+                keybind = KEY_COLOR + "[" + self.task_keys[i] + "]" + Fore.RESET
+                key_center = self.key_space + 10 # handles invisible color codes
 
+                print(format_box(BoxVariant.C_SIDE, self.box_length, row="╋", extra_offset = 0))
 
-        if key == "empty":
-            for i in range(10):
-                keybind = key_color + "[" + self.task_keys[i] + "]" + Fore.RESET
-                key_center = self.key_space + 10
-
-                print(seperator)
                 print(display_format.format(key=keybind.center(key_center),
                                             task=" ".center(self.task_space),
                                             status=" ".center(self.check_space)))
-            print("┗" + "━" * self.key_space + "┻" + "━" * self.task_space + "┻" + "━" * self.check_space + "┛")
 
+            print(format_box(BoxVariant.BOTTOM, self.box_length, row="┻", extra_offset=0))
             return
 
-
-
+        # === prints created tasks ===
         for index, task in enumerate(self.task_info):
-
-
-            keybind = key_color + "[" + self.task_keys[index] + "]" + Fore.RESET
+            keybind = KEY_COLOR + "[" + self.task_keys[index] + "]" + Fore.RESET
             status = self.task_info[task]["status"]
-            # handles invisible color codes
-            key_center = self.key_space + 10
-            status_center = self.check_space + 10 if len(status) > 3 else self.check_space
+            key_center = self.key_space + 10 # handles invisible color codes
+            status_center = self.check_space + 10 if len(status) > 3 else self.check_space # handles invisible color codes
 
+            # === prints only the selected task ===
             if key:
                 if index == self.task_keys.index(key):
-                    print(seperator)
+                    print(format_box(BoxVariant.C_SIDE, self.box_length, row="╋", extra_offset=0))
                     print(display_format.format(key = keybind.center(key_center),
                                                            task = task.center(self.task_space),
                                                            status = status.center(status_center)))
-                    print("┗" + "━" * self.key_space + "┻" + "━" * self.task_space + "┻" + "━" * self.check_space + "┛")
-                    return
-
+                    break
                 else:
                     pass
 
+            # === prints all the tasks ===
             else:
-                print(seperator)
+                print(format_box(BoxVariant.C_SIDE, self.box_length, row="╋", extra_offset= 0))
                 print(display_format.format(key=keybind.center(key_center),
                                                        task=task.center(self.task_space),
                                                        status=status.center(status_center)))
 
-        print("┗" + "━" * self.key_space + "┻" + "━" * self.task_space + "┻" + "━" * self.check_space + "┛")
+        print(format_box(BoxVariant.BOTTOM, self.box_length, row="┻", extra_offset=0))
 
-    def adapt_box_length(self):
+    def adapt_box_length(self) -> None:
         """Scales the display box length dynamically if a newly inputted task name doesn't fit the UI"""
-        for task in self.task_names:
+        for task in list(self.task_info.keys()):
             if len(task) > self.task_space:
                 self.box_length += len(task) - self.task_space
                 self.task_space += len(task) - self.task_space
 
     def remove_tasks(self, key):
-        task = self.task_names[self.task_keys.index(key)]
+        """ Removes the task passed as a parameter and saves the change."""
+        task_keys = list(self.task_info.keys())
+        task = task_keys[self.task_keys.index(key)]
+
         del self.task_info[task]
         self.task_names = [task for task in self.task_info]
         save_file((self.task_info, self.task_keys, self.option_keys))
